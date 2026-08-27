@@ -2,11 +2,18 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.Users.Commands
 {
-    public record UpdateUserCommand(string FirstName, string LastName, string Email, string PhoneNumber, string Username) : IRequest<bool>
+    public record UpdateUserCommand(
+        [Required, StringLength(50)] string FirstName,
+        [Required, StringLength(50)] string LastName,
+        [Required, EmailAddress] string Email,
+        [Required, Phone] string PhoneNumber,
+        [Required, StringLength(30, MinimumLength = 3)] string Username
+    ) : IRequest<bool>
     {
         public int UserId { get; set; }
     }

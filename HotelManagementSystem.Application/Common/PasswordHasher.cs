@@ -11,5 +11,10 @@ namespace HotelManagementSystem.Application.Common
             var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
             return Convert.ToHexString(bytes);
         }
+
+        public static bool Verify(string password, string hash)
+        {
+            return Hash(password) == hash;
+        }
     }
 }

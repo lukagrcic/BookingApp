@@ -3,11 +3,16 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.ServiceTypes.Commands
 {
-    public record CreateServiceTypeCommand(string Name, string? Description, decimal PricePerNight) : IRequest<int>;
+    public record CreateServiceTypeCommand(
+        [Required, StringLength(50)] string Name,
+        [StringLength(300)] string? Description,
+        [Range(0, 10000)] decimal PricePerNight
+    ) : IRequest<int>;
 
     public class CreateServiceTypeCommandHandler : IRequestHandler<CreateServiceTypeCommand, int>
     {

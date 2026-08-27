@@ -3,11 +3,22 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.Reservations.Commands
 {
-    public record CreateReservationCommand(int UserId, int RoomTypeId, int ServiceTypeId, DateTime DateFrom, DateTime DateTo, int NumberOfGuests, string? Note) : IRequest<int>;
+    public record CreateReservationCommand(
+        int RoomTypeId,
+        int ServiceTypeId,
+        [Required] DateTime DateFrom,
+        [Required] DateTime DateTo,
+        [Range(1, 20)] int NumberOfGuests,
+        [StringLength(500)] string? Note
+    ) : IRequest<int>
+    {
+        public int UserId { get; set; }
+    }
 
     public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, int>
     {

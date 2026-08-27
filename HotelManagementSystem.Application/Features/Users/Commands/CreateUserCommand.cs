@@ -4,11 +4,19 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.Users.Commands
 {
-    public record CreateUserCommand(string FirstName, string LastName, string Email, string PhoneNumber, string Username, string Password) : IRequest<int>;
+    public record CreateUserCommand(
+        [Required, StringLength(50)] string FirstName,
+        [Required, StringLength(50)] string LastName,
+        [Required, EmailAddress] string Email,
+        [Required, Phone] string PhoneNumber,
+        [Required, StringLength(30, MinimumLength = 3)] string Username,
+        [Required, MinLength(6)] string Password
+    ) : IRequest<int>;
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
     {

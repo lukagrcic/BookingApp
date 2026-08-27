@@ -1,11 +1,13 @@
 using HotelManagementSystem.Application.Features.Reservations.Commands;
 using HotelManagementSystem.Application.Features.Reservations.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationsController : ControllerBase
@@ -20,8 +22,15 @@ namespace HotelManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateReservationCommand command)
         {
+            command.UserId = GetCurrentUserId();
             var id = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id }, null);
+        }
+
+        private int GetCurrentUserId()
+        {
+            var claim = User.FindFirst("UserId");
+            return int.Parse(claim!.Value);
         }
 
         [HttpGet("{id}")]
@@ -39,6 +48,13 @@ namespace HotelManagementSystem.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllReservationsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("mine")]
+        public async Task<IActionResult> GetMine()
+        {
+            var result = await _mediator.Send(new GetMyReservationsQuery(GetCurrentUserId()));
             return Ok(result);
         }
 

@@ -2,11 +2,19 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.Reservations.Commands
 {
-    public record UpdateReservationCommand(int RoomTypeId, int ServiceTypeId, DateTime DateFrom, DateTime DateTo, int NumberOfGuests, string? Note) : IRequest<bool>
+    public record UpdateReservationCommand(
+        int RoomTypeId,
+        int ServiceTypeId,
+        [Required] DateTime DateFrom,
+        [Required] DateTime DateTo,
+        [Range(1, 20)] int NumberOfGuests,
+        [StringLength(500)] string? Note
+    ) : IRequest<bool>
     {
         public int ReservationId { get; set; }
     }

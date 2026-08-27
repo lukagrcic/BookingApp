@@ -3,11 +3,17 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.RoomTypes.Commands
 {
-    public record UpdateRoomTypeCommand(RoomCategory Category, decimal PricePerNight, string? Description, int Capacity) : IRequest<bool>
+    public record UpdateRoomTypeCommand(
+        RoomCategory Category,
+        [Range(0, 10000)] decimal PricePerNight,
+        [StringLength(300)] string? Description,
+        [Range(1, 20)] int Capacity
+    ) : IRequest<bool>
     {
         public int RoomTypeId { get; set; }
     }

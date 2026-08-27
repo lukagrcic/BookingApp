@@ -1,11 +1,13 @@
 using HotelManagementSystem.Application.Features.Users.Commands;
 using HotelManagementSystem.Application.Features.Users.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -17,7 +19,9 @@ namespace HotelManagementSystem.Controllers
             _mediator = mediator;
         }
 
+
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(CreateUserCommand command)
         {
             var id = await _mediator.Send(command);

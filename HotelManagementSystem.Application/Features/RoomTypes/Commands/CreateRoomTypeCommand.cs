@@ -4,11 +4,17 @@ using HotelManagementSystem.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace HotelManagementSystem.Application.Features.RoomTypes.Commands
 {
-    public record CreateRoomTypeCommand(RoomCategory Category, decimal PricePerNight, string? Description, int Capacity) : IRequest<int>;
+    public record CreateRoomTypeCommand(
+        RoomCategory Category,
+        [Range(0, 10000)] decimal PricePerNight,
+        [StringLength(300)] string? Description,
+        [Range(1, 20)] int Capacity
+    ) : IRequest<int>;
 
 
     public class CreateRoomTypeCommandHandler : IRequestHandler<CreateRoomTypeCommand, int>
